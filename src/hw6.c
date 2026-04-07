@@ -43,25 +43,27 @@ int main(int argc, char *argv[]) {
     if(r_count==0)
         return R_ARGUMENT_MISSING;
     // Accounts for missing S, R, and L_ARGUMENT_INVALID
-    if(strcmp(argv[i], "-s") == 0){
-        if(i + 1 >= argc || argv[i+1][0] == '-')
-            return S_ARGUMENT_MISSING;
-    }
-    else if(strcmp(argv[i], "-r") == 0){
-        if(i + 1 >= argc || argv[i+1][0] == '-')
-            return R_ARGUMENT_MISSING;
-    }
-    else if(strcmp(argv[i], "-l") == 0){
-        if (i + 1 >= argc || argv[i+1][0] == '-')
-            return L_ARGUMENT_INVALID;
+    for(int i = 1; i < argc; i++){
+        if(strcmp(argv[i], "-s") == 0){
+            if(i + 1 >= argc || argv[i+1][0] == '-')
+                return S_ARGUMENT_MISSING;
+        }
+        else if(strcmp(argv[i], "-r") == 0){
+            if(i + 1 >= argc || argv[i+1][0] == '-')
+                return R_ARGUMENT_MISSING;
+        }
+        else if(strcmp(argv[i], "-l") == 0){
+            if (i + 1 >= argc || argv[i+1][0] == '-')
+                return L_ARGUMENT_INVALID;
 
-        int start, end;
-        char extra;
-        if(sscanf(argv[i+1], "%d,%d%c", &start, &end, &extra) != 2)
-            return L_ARGUMENT_INVALID;
-
-        if(start < 1 || end < 1 || start > end)
-            return L_ARGUMENT_INVALID;
+            int start, end;
+            char extra;
+            if(sscanf(argv[i+1], "%d,%d%c", &start, &end, &extra) != 2)
+                return L_ARGUMENT_INVALID;
+            
+            if(start < 1 || end < 1 || start > end)
+                return L_ARGUMENT_INVALID;
+        }
     }
     // Accounts for WILDCARD_INVALID
     return 0;
