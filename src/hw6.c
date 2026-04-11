@@ -124,10 +124,10 @@ int main(int argc, char *argv[]) {
 
     // Accounts for L_ARGUMENT_INVALID
     int start_line = 1, end_line = 1e9;
-    if(l_count > 0){
-        if (!strchr(l_arg, ',')) 
+    if (l_count > 0) {
+    char extra;
+        if (!strchr(l_arg, ','))
             return L_ARGUMENT_INVALID;
-        char extra;
         if (sscanf(l_arg, "%d,%d%c", &start_line, &end_line, &extra) != 2)
             return L_ARGUMENT_INVALID;
         if (start_line < 1 || end_line < 1 || start_line > end_line)

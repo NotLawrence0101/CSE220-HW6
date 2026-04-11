@@ -18,6 +18,7 @@ TEST_SRC := $(shell find $(TSTD) -type f -name '*.c')
 TEST_OBJ := $(patsubst $(TSTD)/%,$(BLDD)/%,$(TEST_SRC:.c=.o))
 
 TEST := unit_tests
+STUDENT_TEST := student_tests
 EXEC := hw6
 
 CFLAGS := -Wall -Wextra -Wshadow -Wdouble-promotion -Wformat=2 -Wundef -pedantic
@@ -35,7 +36,7 @@ TEST_RESULTS := "test_results.json"
 
 MAKEFLAGS := -j
 
-all: setup $(BIND)/$(TEST) $(BIND)/$(EXEC) 
+all: setup $(BIND)/$(TEST) $(BIND)/$(EXEC) $(BIND)/$(STUDENT_TEST)
 
 debug: CFLAGS += $(DFLAGS) $(PRINT_STATEMENTS) 
 debug: all
@@ -49,6 +50,9 @@ setup:
 $(BIND)/$(TEST): $(ALL_OBJF) $(TEST_OBJ)
 	$(CC) $(FUNC_FILES) $(TEST_OBJ) $(INCD) $(TEST_LIB) $(LIBD) -o $@ $(LIBS)
 
+$(BIND)/$(STUDENT_TEST): $(ALL_OBJF) $(TEST_OBJ)
+	$(CC) $(FUNC_FILES) $(TEST_OBJ) $(INCD) $(TEST_LIB) $(LIBD) -o $@ $(LIBS)
+
 $(BLDD)/%.o: $(TSTD)/%.c
 	$(CC) $(CFLAGS) $(INCD) -c -o $@ $<
 
@@ -60,12 +64,13 @@ $(BIND)/$(EXEC): $(ALL_OBJF)
 
 cpdate_tests:
 
-test: 
+test: setup
 	@rm -fr $(TSTD).in
 	@mkdir -p $(TSTD).in
 	@rm -fr $(TSTD).out
 	@mkdir -p $(TSTD).out
-	@$(BIND)/$(TEST) --full-stats --verbose --json=$(TEST_RESULTS) -j1
+# @$(BIND)/$(TEST) --full-stats --verbose --json=$(TEST_RESULTS) -j1
+	@$(BIND)/$(STUDENT_TEST) --full-stats --verbose --json=$(TEST_RESULTS) -j1
 
 clean:
 	rm -fr $(BLDD) $(BIND) $(TSTD).in $(TSTD).out *.out $(TEST_RESULTS)
